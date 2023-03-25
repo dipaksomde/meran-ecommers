@@ -1,0 +1,44 @@
+.navbar {
+    height: 75px;
+}
+
+.ml-200 {
+    margin-left: 200px;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    height: 100vh;
+    background-color: #0d6efd;
+    width: 200px;
+
+}
+
+.sidebar-header {
+    height: 75px;
+    background-color: #0a58ca;
+    width: 100%;
+}
+
+.sidebar-body {
+    height: calc(100vh - 75px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.sidebar-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 2rem;
+    background-color: #0a58ca;
+    margin: 1px 0rem;
+    color: white;
+    transition: 300ms;
+}
+
+.sidebar-item:hover {
+    background-color: #0d6efd;
+    color: white;
+    cursor: pointer;
+}

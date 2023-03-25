@@ -1,0 +1,9 @@
+.menuItem {
+    transition: 600ms;
+}
+
+.menuItem:hover {
+    background-color: red;
+    color: white;
+    cursor: pointer;
+}
