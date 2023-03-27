@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom"
 import { AdminNavbar, Sidebar } from './index'
 import { useState } from "react"
 const AdminLayout = () => {
-    const [showSidebar, setShowSidebar] = useState(true)
+    const [showSidebar, setShowSidebar] = useState(false)
     return <>
         <Sidebar show={{ showSidebar, setShowSidebar }} />
         <AdminNavbar show={{ showSidebar, setShowSidebar }} />

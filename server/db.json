@@ -1,0 +1,14 @@
+{
+    "products": [
+        {
+            "name": "ASUS Core i9 12th Gen",
+            "desc": "32 GB/1 TB SSD/Windows 11 Home/6 GB Graphics/NVIDIA GeForce RTX 6GB RTX 3060) N7601ZM-MQ931WS Gaming Laptop  (16 inch, Black, With MS Office",
+            "stock": 5,
+            "price": 192440,
+            "images": [
+                "https://rukminim1.flixcart.com/image/416/416/xif0q/computer/i/3/2/vivobook-pro-16x-gaming-laptop-asus-original-imagnwe9h5zyfaje.jpeg?q=70"
+            ],
+            "id": 7
+        }
+    ]
+}

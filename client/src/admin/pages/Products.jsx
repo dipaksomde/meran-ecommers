@@ -1,11 +1,33 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Grid from '../components/Grid'
 import { useFormik } from "formik"
 import * as yup from "yup"
 
 import { Link } from "react-router-dom"
+import { useDispatch, useSelector } from 'react-redux'
+import { addProduct } from '../../redux/admin/adminActions'
+import { invalidate } from '../../redux/admin/adminSlice'
 const Products = () => {
+    const { productAdded, error } = useSelector(state => state.admin)
+    const dispatch = useDispatch()
+    useEffect(() => {
+        if (productAdded || error) {
+            setTimeout(() => {
+                dispatch(invalidate())
+            }, 3000);
+        }
+    }, [productAdded, error])
+
     return <>
+        <div className="container">
+            {
+                productAdded && <div class="alert alert-success">Product Added Success
+                </div>
+            }
+            {
+                error && <div class="alert alert-danger">{error}</div>
+            }
+        </div>
         <div className="text-end container mb-5">
             <button
                 data-bs-toggle="modal"
@@ -13,6 +35,9 @@ const Products = () => {
                 type="button"
                 class="btn btn-primary">+ Add Product</button>
         </div>
+
+
+
         <Grid
             col1={<ProductList />}
             col2={<ProductDetails />}
@@ -83,6 +108,8 @@ const ProductEdit = () => {
 }
 
 const AddProduct = () => {
+
+    const dispatch = useDispatch()
     const formik = useFormik({
         initialValues: {
             name: "ASUS Core i9 12th Gen",
@@ -99,15 +126,15 @@ const AddProduct = () => {
             images: yup.string().required(),
         }),
         onSubmit: values => {
-            console.log(values);
+            dispatch(addProduct({ ...values, images: [values.images] }))
         }
     })
 
     return <>
-        <div class="modal fade " id="addProduct" >
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <form onSubmit={formik.handleSubmit} >
+        <form onSubmit={formik.handleSubmit} >
+            <div class="modal fade " id="addProduct" >
+                <div class="modal-dialog modal-dialog-scrollable">
+                    <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -194,13 +221,13 @@ const AddProduct = () => {
                                 class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <button
                                 type="submit"
-                                class="btn btn-primary">Save changes</button>
+                                class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
                         </div>
 
-                    </form>
+                    </div>
                 </div>
             </div>
-        </div>
+        </form>
     </>
 }
 
