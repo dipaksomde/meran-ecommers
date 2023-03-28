@@ -27,3 +27,23 @@ export const getProductDetail = createAsyncThunk("public/get-product-detail", as
     }
 
 })
+
+
+export const getCartItems = createAsyncThunk("public/get-cart", async (cartItem, { rejectWithValue, getState }) => {
+    try {
+        const { data } = await api.get(`/cart`)
+        return data
+    } catch (error) {
+        return rejectWithValue(error.message)
+    }
+
+})
+export const userRegister = createAsyncThunk("public/register", async (user, { rejectWithValue, getState }) => {
+    try {
+        const { data } = await api.post(`/users`, user)
+        return data
+    } catch (error) {
+        return rejectWithValue(error.message)
+    }
+
+})

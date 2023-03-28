@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 import { getProductDetail } from "../../redux/public/publicAction"
+import { addToCart } from "../../redux/public/publicSlice"
 
 const DetailCard = () => {
     const { productId } = useParams()
@@ -25,6 +26,13 @@ const DetailCard = () => {
 
 
 const LeftColumn = ({ singleProduct }) => {
+
+    const dispatch = useDispatch()
+    const [qty, setQty] = useState(1)
+
+    const handleAddToCart = () => {
+        dispatch(addToCart({ ...singleProduct, qty }))
+    }
     const imagesContent = singleProduct.images.map(item => <img
         src={item}
         key={item}
@@ -33,7 +41,6 @@ const LeftColumn = ({ singleProduct }) => {
         alt={singleProduct.name} />)
 
     const [source, setSource] = useState(singleProduct.images[0])
-    const [qty, setQty] = useState(1)
     return <div className="card">
         <div className="card-body">
             <div className="row">
@@ -63,7 +70,10 @@ const LeftColumn = ({ singleProduct }) => {
                                 </div>
                                 <div class="btn-group w-100 btn-group-lg">
                                     <button type="button" class="btn btn-warning">Buy Now</button>
-                                    <button type="button" class="btn btn-primary">Add To Cart</button>
+                                    <button
+                                        onClick={handleAddToCart}
+                                        type="button"
+                                        class="btn btn-primary">Add To Cart</button>
                                 </div>
                             </>
                             : <span className="fs-5">Outoff Stock</span>

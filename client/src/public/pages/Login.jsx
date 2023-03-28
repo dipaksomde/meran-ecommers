@@ -1,6 +1,13 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
+import { login } from '../../redux/user/userActions'
 
 const Login = () => {
+    const dispatch = useDispatch()
+
+    const handleLogin = () => {
+        dispatch(login({ email: "john@gmail.com", password: "123" }))
+    }
     return <div class="container">
         <div class="row">
             <div class="col-sm-6 offset-sm-3">
@@ -29,7 +36,7 @@ const Login = () => {
                             <div class="valid-feedback">Looks good!</div>
                             <div class="invalid-feedback">Please choose a username.</div>
                         </div>
-                        <button type="button" class="btn btn-primary w-100 mt-3">
+                        <button onClick={handleLogin} type="button" class="btn btn-primary w-100 mt-3">
                             Login
                         </button>
                         <p class="text-center mt-3">

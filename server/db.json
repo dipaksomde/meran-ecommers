@@ -4,7 +4,7 @@
       "name": "ASUS Core i9 12th Gen",
       "desc": "32 GB/1 TB SSD/Windows 11 Home/6 GB Graphics/NVIDIA GeForce RTX 6GB RTX 3060) N7601ZM-MQ931WS Gaming Laptop  (16 inch, Black, With MS Office",
       "stock": 5,
-      "price": 192440,
+      "price": 100,
       "images": [
         "https://rukminim1.flixcart.com/image/416/416/xif0q/computer/i/3/2/vivobook-pro-16x-gaming-laptop-asus-original-imagnwe9h5zyfaje.jpeg?q=70"
       ],
@@ -16,13 +16,22 @@
       "name": "demo",
       "desc": "32 GB/1 TB SSD/Windows 11 Home/6 GB Graphics/NVIDIA GeForce RTX 6GB RTX 3060) N7601ZM-MQ931WS Gaming Laptop  (16 inch, Black, With MS Office",
       "stock": 5,
-      "price": 192440,
+      "price": 150,
       "images": [
         "https://rukminim1.flixcart.com/image/416/416/xif0q/computer/i/3/2/vivobook-pro-16x-gaming-laptop-asus-original-imagnwe9h5zyfaje.jpeg?q=70"
       ],
       "publish": true,
       "available": true,
       "id": 2
+    }
+  ],
+  "users": [
+    {
+      "name": "john",
+      "email": "john@gmail.com",
+      "password": "123",
+      "cpassword": "123",
+      "id": 1
     }
   ]
 }

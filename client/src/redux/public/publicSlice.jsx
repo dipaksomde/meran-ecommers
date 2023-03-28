@@ -1,10 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getProductDetail, getProducts } from "./publicAction";
+import { getCartItems, getProductDetail, getProducts, userRegister } from "./publicAction";
 
 const publicSlice = createSlice({
     name: "public",
-    initialState: {},
-    reducers: {},
+    initialState: {
+        cart: []
+    },
+    reducers: {
+        addToCart: (state, { payload }) => {
+            state.cart.push(payload)
+        }
+    },
     extraReducers: builder => {
         builder
             .addCase(getProducts.pending, (state, { payload }) => {
@@ -30,9 +36,39 @@ const publicSlice = createSlice({
                 state.laoding = false
                 state.error = payload
             })
+
+
+
+
+
+            .addCase(getCartItems.pending, (state, { payload }) => {
+                state.laoding = true
+            })
+            .addCase(getCartItems.fulfilled, (state, { payload }) => {
+                state.laoding = false
+                state.cart = payload
+            })
+            .addCase(getCartItems.rejected, (state, { payload }) => {
+                state.laoding = false
+                state.error = payload
+            })
+
+
+            .addCase(userRegister.pending, (state, { payload }) => {
+                state.laoding = true
+            })
+            .addCase(userRegister.fulfilled, (state, { payload }) => {
+                state.laoding = false
+                state.register = true
+            })
+            .addCase(userRegister.rejected, (state, { payload }) => {
+                state.laoding = false
+                state.error = payload
+            })
     }
 
 })
 
+export const { addToCart } = publicSlice.actions
 
 export default publicSlice.reducer

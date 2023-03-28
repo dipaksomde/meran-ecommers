@@ -13,8 +13,18 @@ const Navbar = () => {
                 <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div className="navbar-nav">
                         <Menu />
+
+                        <Link
+                            to="/register"
+                            className="nav-link">Register
+                        </Link>
+                        <Link
+                            to="/login"
+                            className="nav-link">Login
+                        </Link>
                     </div>
                     <div className='ms-auto'>
+
                         <Link
                             to="cart"
                             className="btn btn-outline-primary mx-2"><i className='bi bi-cart'></i>

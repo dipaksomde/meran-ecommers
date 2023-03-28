@@ -1,18 +1,9 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import BillCard from './BillCard'
 
 const CartList = () => {
-    const cartProducts = []
-    for (let i = 1; i <= 5; i++) {
-        cartProducts.push({
-            id: i,
-            name: `Product ${i}`,
-            qty: i,
-            price: 250,
-            images: ["https://rukminim1.flixcart.com/image/416/416/kirr24w0/computer/x/t/w/dell-na-thin-and-light-laptop-original-imafyhm53umy7d4d.jpeg?q=70", "https://rukminim1.flixcart.com/image/416/416/kpft18w0/computer/k/c/5/xps-9305-notebook-dell-original-imag3nzeyqfcsw3v.jpeg?q=70"]
-        })
-    }
-
+    const { cart: cartProducts } = useSelector(state => state.public)
     return <>
         <div className="container">
             <div className="row">
