@@ -1,20 +1,23 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Grid from '../components/Grid'
 import { useFormik } from "formik"
 import * as yup from "yup"
 
 import { Link } from "react-router-dom"
 import { useDispatch, useSelector } from 'react-redux'
-import { addProduct } from '../../redux/admin/adminActions'
+import { addProduct, readProducts, updateProduct } from '../../redux/admin/adminActions'
 import { invalidate } from '../../redux/admin/adminSlice'
 const Products = () => {
+    const [show, setShow] = useState(false)
+    const [selectedProduct, setSelectedProduct] = useState()
     const { productAdded, error } = useSelector(state => state.admin)
     const dispatch = useDispatch()
     useEffect(() => {
         if (productAdded || error) {
             setTimeout(() => {
                 dispatch(invalidate())
-            }, 3000);
+                dispatch(readProducts())
+            }, 1500)
         }
     }, [productAdded, error])
 
@@ -35,40 +38,34 @@ const Products = () => {
                 type="button"
                 class="btn btn-primary">+ Add Product</button>
         </div>
-
-
-
         <Grid
-            col1={<ProductList />}
-            col2={<ProductDetails />}
-            col3={<ProductEdit />}
+            col1={<ProductList setSelectedProduct={setSelectedProduct} />}
+            col2={<ProductDetails
+                setShow={setShow}
+                selectedProduct={selectedProduct}
+            />}
+            col3={<ProductEdit
+                show={show}
+                setShow={setShow}
+                selectedProduct={selectedProduct}
+                setSelectedProduct={setSelectedProduct} />}
         />
 
         <AddProduct />
 
     </>
 }
-const ProductList = () => {
-    const products = []
-    for (let i = 0; i < 10; i++) {
-        products.push({
-            id: i,
-            name: `Product ${i}`,
-            desc: "Lorem ipsum dolor sit amet.",
-            price: Math.floor(i * Math.random() + 200),
-            image: "https://rukminim1.flixcart.com/image/416/416/kynb6vk0/monitor/1/n/s/lf22t354fhwxxl-full-hd-22-lf22t354fhwxxl-samsung-original-imagats2rjbg9uhv.jpeg?q=70"
-        })
-    }
-
-    const content = products.map(item => <>
-        <div class="col-sm-12 my-3">
-            <Link
-                className='text-decoration-none text-dark'
-                to={`/product-detail/${item.id}`}>
-                <ProductCard
-                    product={item}
-                />
-            </Link>
+const ProductList = ({ setSelectedProduct }) => {
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(readProducts())
+    }, [])
+    const { products } = useSelector(state => state.admin)
+    const content = products && products.map(item => <>
+        <div
+            class="col-sm-12 mb-4"
+            onClick={e => setSelectedProduct(item)}>
+            <ProductCard product={item} />
         </div>
     </>
     )
@@ -83,8 +80,8 @@ const ProductList = () => {
 }
 const ProductCard = ({ product }) => {
     return <>
-        <div class="card">
-            <img src={product.image} class="img-fluid" alt="" />
+        <div class="card p-4">
+            <img src={product.images} class="img-fluid" alt="" />
             <div class="card-body">
                 <h6>{product.name}</h6>
                 <p>{product.desc}</p>
@@ -96,14 +93,106 @@ const ProductCard = ({ product }) => {
         </div>
     </>
 }
-const ProductDetails = () => {
-    return <>
-        <h1>ProductDetails</h1>
-    </>
+const ProductDetails = ({ selectedProduct, setShow }) => {
+    return selectedProduct && <div className='card'>
+        <div className="card-body">
+            <div className='text-end'>
+                <button
+                    type="button"
+                    onClick={e => setShow(true)}
+                    class="btn btn-warning mb-5 ">
+                    Edit
+                </button>
+            </div>
+            {
+                <>
+                    <h1>{selectedProduct.name}</h1>
+                    <p>{selectedProduct.desc}</p>
+                    <p>{selectedProduct.price}</p>
+
+                </>
+            }
+        </div>
+    </div>
 }
-const ProductEdit = () => {
-    return <>
-        <h1>ProductEdit</h1>
+const ProductEdit = ({ selectedProduct, setSelectedProduct, show, setShow }) => {
+    const dispatch = useDispatch()
+    const { update, error, loading } = useSelector(state => state.admin)
+    const handleUpdateProduct = e => {
+        dispatch(updateProduct(selectedProduct))
+    }
+    useEffect(() => {
+        if (update) {
+            dispatch(readProducts())
+            setTimeout(() => {
+                dispatch(invalidate())
+                setSelectedProduct(null)
+                setShow(false)
+            }, 1500);
+        }
+    }, [update])
+    if (update) {
+        return <div class="alert alert-success">Update Success
+        </div>
+    }
+    if (loading) {
+        return <div class="alert alert-primary">
+            Updating....
+            <div class="spinner-border text-primary"></div>
+        </div>
+    }
+    return selectedProduct && show && <>
+        <div className="card">
+            <div className="card-body">
+                <div class="form-check form-switch">
+                    <input
+                        checked={selectedProduct.publish}
+                        onChange={e => setSelectedProduct({
+                            ...selectedProduct,
+                            publish: e.target.checked
+                        })}
+                        class="form-check-input" type="checkbox" id="publish" />
+                    <label class="form-check-label" for="publish">Publish</label>
+                </div> <br />
+                <div class="form-check form-switch">
+                    <input
+                        checked={selectedProduct.available}
+                        onChange={e => setSelectedProduct({
+                            ...selectedProduct,
+                            available: e.target.checked
+                        })}
+                        class="form-check-input" type="checkbox" id="available" />
+                    <label class="form-check-label" for="available">Available</label>
+                </div><br />
+
+                <input
+                    type="text"
+                    className='form-control'
+                    onChange={e => setSelectedProduct({ ...selectedProduct, name: e.target.value })}
+                    value={selectedProduct.name} /> <br />
+
+                <input
+                    type="text"
+                    className='form-control'
+                    onChange={e => setSelectedProduct({ ...selectedProduct, desc: e.target.value })}
+                    value={selectedProduct.desc} /> <br />
+                <input
+                    type="text"
+                    className='form-control'
+                    onChange={e => setSelectedProduct({ ...selectedProduct, images: e.target.value })}
+                    value={selectedProduct.images[0]} /> <br />
+                <input
+                    type="text"
+                    className='form-control'
+                    onChange={e => setSelectedProduct({
+                        ...selectedProduct,
+                        price: e.target.value
+                    })}
+                    value={selectedProduct.price} /> <br />
+                <button onClick={handleUpdateProduct} type="button" class="btn btn-primary w-100 btn-lg">Update Product</button>
+            </div>
+        </div>
+
     </>
 }
 

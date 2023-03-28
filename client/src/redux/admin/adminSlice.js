@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addProduct, readProducts } from "./adminActions";
+import { addProduct, readProducts, updateProduct } from "./adminActions";
 
 const adminSlice = createSlice({
     name: "admin",
@@ -8,6 +8,7 @@ const adminSlice = createSlice({
         invalidate: state => {
             state.productAdded = null
             state.error = null
+            state.update = null
         }
     },
     extraReducers: builder => {
@@ -33,6 +34,19 @@ const adminSlice = createSlice({
                 state.products = payload
             })
             .addCase(readProducts.rejected, (state, { payload }) => {
+                state.loading = false
+                state.error = payload
+            })
+
+
+            .addCase(updateProduct.pending, (state, { payload }) => {
+                state.loading = true
+            })
+            .addCase(updateProduct.fulfilled, (state, { payload }) => {
+                state.loading = false
+                state.update = true
+            })
+            .addCase(updateProduct.rejected, (state, { payload }) => {
                 state.loading = false
                 state.error = payload
             })

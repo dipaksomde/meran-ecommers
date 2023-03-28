@@ -1,15 +1,16 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { useParams } from "react-router-dom"
+import { getProductDetail } from "../../redux/public/publicAction"
 
 const DetailCard = () => {
-    const [singleProduct, setSingleProduct] = useState({
-        name: "Dell XPS 13 Pro",
-        desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur ex facilis, doloribus modi atque itaque suscipit nihil, at, id nemo nisi? Ducimus quidem sint nesciunt in saepe numquam, laudantium architecto.",
-        price: 98999,
-        images: ["https://rukminim1.flixcart.com/image/416/416/kirr24w0/computer/x/t/w/dell-na-thin-and-light-laptop-original-imafyhm53umy7d4d.jpeg?q=70", "https://rukminim1.flixcart.com/image/416/416/kpft18w0/computer/k/c/5/xps-9305-notebook-dell-original-imag3nzeyqfcsw3v.jpeg?q=70", "https://rukminim1.flixcart.com/image/416/416/kpft18w0/computer/y/x/h/xps-9305-notebook-dell-original-imag3nzemwhaywah.jpeg?q=70", "https://rukminim1.flixcart.com/image/416/416/kpft18w0/computer/n/n/u/xps-9305-notebook-dell-original-imag3nzefmgybwej.jpeg?q=70", "https://rukminim1.flixcart.com/image/416/416/kpft18w0/computer/h/3/x/xps-9305-notebook-dell-original-imag3nzeasggy4jk.jpeg?q=70", "https://rukminim1.flixcart.com/image/416/416/kpft18w0/computer/t/j/6/xps-9305-notebook-dell-original-imag3nzeejyx8uwd.jpeg?q=70"],
-        stock: 5
-
-    })
-    return <><div className="container">
+    const { productId } = useParams()
+    const { singleProduct, loading, error } = useSelector(state => state.public)
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(getProductDetail(productId))
+    }, [])
+    return singleProduct && <><div className="container">
         <div className="row">
             <div className="col-sm-5">
                 <LeftColumn singleProduct={singleProduct} />
@@ -46,21 +47,27 @@ const LeftColumn = ({ singleProduct }) => {
                         style={{ height: "250px" }}
                         alt="" />
 
-                    <div class="d-flex justify-content-center gap-4 mb-4">
-                        <button
-                            type="button"
-                            onClick={e => setQty(qty === 1 ? 1 : qty - 1)}
-                            class="btn btn-sm btn-outline-dark w-100">-</button>
-                        <span className="fs-4">{qty}</span>
-                        <button
-                            type="button"
-                            onClick={e => setQty(qty === singleProduct.stock ? qty : qty + 1)}
-                            class="btn btn-sm btn-outline-dark w-100">+</button>
-                    </div>
-                    <div class="btn-group w-100 btn-group-lg">
-                        <button type="button" class="btn btn-warning">Buy Now</button>
-                        <button type="button" class="btn btn-primary">Add To Cart</button>
-                    </div>
+                    {
+                        singleProduct.available
+                            ? <>
+                                <div class="d-flex justify-content-center gap-4 mb-4">
+                                    <button
+                                        type="button"
+                                        onClick={e => setQty(qty === 1 ? 1 : qty - 1)}
+                                        class="btn btn-sm btn-outline-dark w-100">-</button>
+                                    <span className="fs-4">{qty}</span>
+                                    <button
+                                        type="button"
+                                        onClick={e => setQty(qty === singleProduct.stock ? qty : qty + 1)}
+                                        class="btn btn-sm btn-outline-dark w-100">+</button>
+                                </div>
+                                <div class="btn-group w-100 btn-group-lg">
+                                    <button type="button" class="btn btn-warning">Buy Now</button>
+                                    <button type="button" class="btn btn-primary">Add To Cart</button>
+                                </div>
+                            </>
+                            : <span className="fs-5">Outoff Stock</span>
+                    }
                 </div>
             </div>
         </div>

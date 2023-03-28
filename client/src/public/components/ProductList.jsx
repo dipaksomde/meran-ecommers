@@ -1,24 +1,15 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { readProducts } from '../../redux/admin/adminActions'
+import { getProducts } from '../../redux/public/publicAction'
 
 const ProductList = () => {
     const dispatch = useDispatch()
-    const { products } = useSelector(state => state.admin)
+    const { products } = useSelector(state => state.public)
     useEffect(() => {
-        dispatch(readProducts())
+        dispatch(getProducts())
     }, [])
-    // const products = []
-    // for (let i = 0; i < 10; i++) {
-    //     products.push({
-    //         id: i,
-    //         name: `Product ${i}`,
-    //         desc: "Lorem ipsum dolor sit amet.",
-    //         price: Math.floor(i * Math.random() + 200),
-    //         image: "https://rukminim1.flixcart.com/image/416/416/kynb6vk0/monitor/1/n/s/lf22t354fhwxxl-full-hd-22-lf22t354fhwxxl-samsung-original-imagats2rjbg9uhv.jpeg?q=70"
-    //     })
-    // }
+
 
     const content = products && products.map(item => <>
         <div class="col-sm-3 my-3">
