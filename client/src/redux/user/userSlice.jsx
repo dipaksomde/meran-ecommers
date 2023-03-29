@@ -1,10 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { login } from "./userActions";
+import { login, updateProfile } from "./userActions";
 
 const userSlice = createSlice({
     name: "user",
-    initialState: {},
-    reducers: {},
+    initialState: {
+        info: JSON.parse(localStorage.getItem("userInfo"))
+    },
+    reducers: {
+        invalidate: (state, { payload }) => {
+            state.update = null
+        },
+        logout: (state) => {
+            localStorage.removeItem("userInfo")
+            state.info = null
+        }
+    },
     extraReducers: builder => {
         builder
             .addCase(login.pending, (state, { payload }) => {
@@ -19,8 +29,20 @@ const userSlice = createSlice({
                 state.error = payload
             })
 
+            .addCase(updateProfile.pending, (state, { payload }) => {
+                state.loading = true
+            })
+            .addCase(updateProfile.fulfilled, (state, { payload }) => {
+                state.loading = false
+                state.update = true
+            })
+            .addCase(updateProfile.rejected, (state, { payload }) => {
+                state.loading = false
+                state.error = payload
+            })
+
     }
 
 })
-
+export const { invalidate, logout } = userSlice.actions
 export default userSlice.reducer

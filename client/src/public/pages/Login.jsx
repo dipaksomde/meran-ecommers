@@ -1,8 +1,15 @@
-import React from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { login } from '../../redux/user/userActions'
-
+import { useNavigate } from "react-router-dom"
 const Login = () => {
+    const { info } = useSelector(state => state.user)
+    const navigate = useNavigate()
+    useEffect(() => {
+        if (info) {
+            navigate("/checkout")
+        }
+    }, [info])
     const dispatch = useDispatch()
 
     const handleLogin = () => {

@@ -29,8 +29,14 @@
     {
       "name": "john",
       "email": "john@gmail.com",
-      "password": "123",
-      "cpassword": "123",
+      "mobile": "89898989898",
+      "address": {
+        "house": "fake house",
+        "street": "fake street",
+        "city": "fake city",
+        "pin": "787878787"
+      },
+      "active": true,
       "id": 1
     }
   ]

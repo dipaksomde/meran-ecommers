@@ -1,12 +1,17 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { logout } from '../../redux/user/userSlice'
 import "./../../assets/public-navbar.css"
 const Navbar = () => {
+    const { info } = useSelector(state => state.user)
+    const { cart } = useSelector(state => state.public)
+    const dispatch = useDispatch()
     return <>
         <Search />
         <nav className="navbar navbar-expand-lg bg-white  mb-5">
             <div className="container">
-                <a className="navbar-brand" href="#">Navbar</a>
+                <Link to="/" className="navbar-brand" >Flipkart Pro</Link>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
                     <span className="navbar-toggler-icon"></span>
                 </button>
@@ -14,20 +19,45 @@ const Navbar = () => {
                     <div className="navbar-nav">
                         <Menu />
 
-                        <Link
-                            to="/register"
-                            className="nav-link">Register
-                        </Link>
-                        <Link
-                            to="/login"
-                            className="nav-link">Login
-                        </Link>
+                        {
+                            !info && <>
+                                <Link
+                                    to="/register"
+                                    className="nav-link">Register
+                                </Link>
+                                <Link
+                                    to="/login"
+                                    className="nav-link">Login
+                                </Link>
+                            </>
+
+                        }
+
                     </div>
                     <div className='ms-auto'>
-
+                        {
+                            info && <>
+                                <div class="dropdown mx-3 d-inline">
+                                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" >
+                                        {info.name}
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#">Action</a></li>
+                                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                                        <li><button
+                                            onClick={e => dispatch(logout())}
+                                            class="dropdown-item" >
+                                            Logout
+                                        </button></li>
+                                    </ul>
+                                </div>
+                            </>
+                        }
                         <Link
                             to="cart"
-                            className="btn btn-outline-primary mx-2"><i className='bi bi-cart'></i>
+                            className="btn btn-outline-primary mx-2">
+                            <i className='bi bi-cart'></i>
+                            <strong>{cart && cart.length}</strong>
                         </Link>
                         <button
                             type="button"

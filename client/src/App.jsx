@@ -2,6 +2,7 @@ import { Cart, Checkout, Details, Home, Login, OrderFail, OrderSuccess, PublicLa
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { Account, Orders, Profile, Settings, UserLayout } from './user'
 import { AdminLayout, AdminOrders, AdminProducts, AdminSettings, AdminUsers, Dashboard } from './admin'
+import Protected from './user/Protected'
 
 const App = () => {
   return <div className='bg-light'>
@@ -15,13 +16,13 @@ const App = () => {
           <Route path="/register" element={<Register />} />
 
           {/* protected */}
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/payment-success" element={<OrderSuccess />} />
-          <Route path="/payment-fail" element={<OrderFail />} />
+          <Route path="/checkout" element={<Protected compo={<Checkout />} />} />
+          <Route path="/payment-success" element={<Protected compo={<OrderSuccess />} />} />
+          <Route path="/payment-fail" element={<Protected compo={<OrderFail />} />} />
         </Route>
 
         {/* protected */}
-        <Route path="/user" element={<UserLayout />}>
+        <Route path="/user" element={<Protected compo={<UserLayout />} />}>
           <Route index element={<Account />} />
           <Route path="profile" element={<Profile />} />
           <Route path="orders" element={<Orders />} />

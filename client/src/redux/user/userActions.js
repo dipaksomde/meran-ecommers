@@ -11,14 +11,24 @@ export const login = createAsyncThunk("user/login", async (userData, { rejectWit
         })
         console.log(data)
         if (data.length !== 0) {
-            return {
-                name: data[0].name,
-                email: data[0].email,
-            }
+            localStorage.setItem("userInfo", JSON.stringify(data[0]))
+            return data[0]
+
+
         } else {
             return rejectWithValue("email or password do not match")
         }
 
+    } catch (error) {
+        return rejectWithValue("something went wrong : " + error.message)
+
+    }
+
+})
+export const updateProfile = createAsyncThunk("user/update-profile", async (userData, { rejectWithValue }) => {
+    try {
+        const { data } = await api.put(`/users/${userData.id}`, userData)
+        return true
     } catch (error) {
         return rejectWithValue("something went wrong : " + error.message)
 
