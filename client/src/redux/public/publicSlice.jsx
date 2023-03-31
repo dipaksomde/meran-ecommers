@@ -9,6 +9,12 @@ const publicSlice = createSlice({
     reducers: {
         addToCart: (state, { payload }) => {
             state.cart.push(payload)
+        },
+        deleteCartItem: (state, { payload }) => {
+            state.cart.splice(payload, 1)
+        },
+        emptyCart: state => {
+            state.cart = []
         }
     },
     extraReducers: builder => {
@@ -69,6 +75,6 @@ const publicSlice = createSlice({
 
 })
 
-export const { addToCart } = publicSlice.actions
+export const { addToCart, emptyCart, deleteCartItem } = publicSlice.actions
 
 export default publicSlice.reducer

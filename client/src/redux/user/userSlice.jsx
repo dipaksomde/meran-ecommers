@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { login, updateProfile } from "./userActions";
+import { getUserOrders, login, placeOrder, updateProfile } from "./userActions";
 
 const userSlice = createSlice({
     name: "user",
@@ -37,6 +37,32 @@ const userSlice = createSlice({
                 state.update = true
             })
             .addCase(updateProfile.rejected, (state, { payload }) => {
+                state.loading = false
+                state.error = payload
+            })
+
+
+            .addCase(placeOrder.pending, (state, { payload }) => {
+                state.loading = true
+            })
+            .addCase(placeOrder.fulfilled, (state, { payload }) => {
+                state.loading = false
+                state.placed = true
+            })
+            .addCase(placeOrder.rejected, (state, { payload }) => {
+                state.loading = false
+                state.error = payload
+            })
+
+
+            .addCase(getUserOrders.pending, (state, { payload }) => {
+                state.loading = true
+            })
+            .addCase(getUserOrders.fulfilled, (state, { payload }) => {
+                state.loading = false
+                state.orderHistory = payload
+            })
+            .addCase(getUserOrders.rejected, (state, { payload }) => {
                 state.loading = false
                 state.error = payload
             })

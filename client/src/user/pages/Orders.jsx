@@ -1,45 +1,23 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { getUserOrders } from '../../redux/user/userActions'
+import { Link } from 'react-router-dom'
 
 const Orders = () => {
-    const userOrders = [
-        {
-            id: 1,
-            status: "dispatch",
-            paid: false,
-            products: [
-                {
-                    id: 1,
-                    name: "keyboard",
-                    qty: 1,
-                    price: 450,
-                    images: ["https://rukminim1.flixcart.com/image/416/416/kirr24w0/computer/x/t/w/dell-na-thin-and-light-laptop-original-imafyhm53umy7d4d.jpeg?q=70", "https://rukminim1.flixcart.com/image/416/416/kpft18w0/computer/k/c/5/xps-9305-notebook-dell-original-imag3nzeyqfcsw3v.jpeg?q=70", "https://rukminim1.flixcart.com/image/416/416/kpft18w0/computer/y/x/h/xps-9305-notebook-dell-original-imag3nzemwhaywah.jpeg?q=70", "https://rukminim1.flixcart.com/image/416/416/kpft18w0/computer/n/n/u/xps-9305-notebook-dell-original-imag3nzefmgybwej.jpeg?q=70", "https://rukminim1.flixcart.com/image/416/416/kpft18w0/computer/h/3/x/xps-9305-notebook-dell-original-imag3nzeasggy4jk.jpeg?q=70", "https://rukminim1.flixcart.com/image/416/416/kpft18w0/computer/t/j/6/xps-9305-notebook-dell-original-imag3nzeejyx8uwd.jpeg?q=70"],
-                },
-                {
-                    id: 2,
-                    name: "mouse",
-                    qty: 1,
-                    price: 750,
-                    images: ["https://rukminim1.flixcart.com/image/416/416/kirr24w0/computer/x/t/w/dell-na-thin-and-light-laptop-original-imafyhm53umy7d4d.jpeg?q=70", "https://rukminim1.flixcart.com/image/416/416/kpft18w0/computer/k/c/5/xps-9305-notebook-dell-original-imag3nzeyqfcsw3v.jpeg?q=70", "https://rukminim1.flixcart.com/image/416/416/kpft18w0/computer/y/x/h/xps-9305-notebook-dell-original-imag3nzemwhaywah.jpeg?q=70", "https://rukminim1.flixcart.com/image/416/416/kpft18w0/computer/n/n/u/xps-9305-notebook-dell-original-imag3nzefmgybwej.jpeg?q=70", "https://rukminim1.flixcart.com/image/416/416/kpft18w0/computer/h/3/x/xps-9305-notebook-dell-original-imag3nzeasggy4jk.jpeg?q=70", "https://rukminim1.flixcart.com/image/416/416/kpft18w0/computer/t/j/6/xps-9305-notebook-dell-original-imag3nzeejyx8uwd.jpeg?q=70"],
-                },
-            ]
-        },
-        {
-            id: 2,
-            status: "delivered",
-            paid: true,
-            products: [
-                {
-                    id: 3,
-                    name: "mobile",
-                    qty: 2,
-                    price: 12750,
-                    images: ["https://rukminim1.flixcart.com/image/416/416/kirr24w0/computer/x/t/w/dell-na-thin-and-light-laptop-original-imafyhm53umy7d4d.jpeg?q=70", "https://rukminim1.flixcart.com/image/416/416/kpft18w0/computer/k/c/5/xps-9305-notebook-dell-original-imag3nzeyqfcsw3v.jpeg?q=70", "https://rukminim1.flixcart.com/image/416/416/kpft18w0/computer/y/x/h/xps-9305-notebook-dell-original-imag3nzemwhaywah.jpeg?q=70", "https://rukminim1.flixcart.com/image/416/416/kpft18w0/computer/n/n/u/xps-9305-notebook-dell-original-imag3nzefmgybwej.jpeg?q=70", "https://rukminim1.flixcart.com/image/416/416/kpft18w0/computer/h/3/x/xps-9305-notebook-dell-original-imag3nzeasggy4jk.jpeg?q=70", "https://rukminim1.flixcart.com/image/416/416/kpft18w0/computer/t/j/6/xps-9305-notebook-dell-original-imag3nzeejyx8uwd.jpeg?q=70"],
-                },
-            ]
-        }
-    ]
+    const { orderHistory } = useSelector(state => state.user)
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(getUserOrders())
+    }, [])
 
-    const content = userOrders.map((item, i) => <tr key={item.id}>
+    if (orderHistory && orderHistory.length === 0) {
+        return <div className='container'>
+            <h1>No  Orders</h1>
+            <Link to="/" className='btn btn-outline-primary'>Shop Now</Link>
+        </div>
+    }
+
+    const content = orderHistory && orderHistory.map((item, i) => <tr key={item.id}>
         <td>{i + 1}</td>
         <td>{item.status}</td>
         <td>{item.paid ? "Paid" : "UnPaid"}</td>

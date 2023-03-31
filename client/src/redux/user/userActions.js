@@ -35,3 +35,32 @@ export const updateProfile = createAsyncThunk("user/update-profile", async (user
     }
 
 })
+export const placeOrder = createAsyncThunk("user/order-place", async (orderData, { rejectWithValue, getState }) => {
+    try {
+        const { data } = await api.post(`/orders`, {
+            userId: getState().user.info.id,
+            products: orderData,
+            paid: false,
+            status: "placed"
+        })
+        return true
+    } catch (error) {
+        return rejectWithValue("something went wrong : " + error.message)
+
+    }
+
+})
+export const getUserOrders = createAsyncThunk("user/get-orders", async (orderData, { rejectWithValue, getState }) => {
+    try {
+        const { data } = await api.get(`/orders`, {
+            params: {
+                userId: getState().user.info.id
+            }
+        })
+        return data
+    } catch (error) {
+        return rejectWithValue("something went wrong : " + error.message)
+
+    }
+
+})

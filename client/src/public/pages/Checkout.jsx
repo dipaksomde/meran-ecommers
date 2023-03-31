@@ -1,18 +1,20 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import BillCard from '../components/BillCard'
-
+import { useSelector, useDispatch } from 'react-redux'
+import { placeOrder } from '../../redux/user/userActions'
+import { useEffect } from 'react'
+import { emptyCart } from '../../redux/public/publicSlice'
 const Checkout = () => {
-    const cartProducts = []
-    for (let i = 1; i <= 5; i++) {
-        cartProducts.push({
-            id: i,
-            name: `Product ${i}`,
-            qty: i,
-            price: 250,
-            images: ["https://rukminim1.flixcart.com/image/416/416/kirr24w0/computer/x/t/w/dell-na-thin-and-light-laptop-original-imafyhm53umy7d4d.jpeg?q=70", "https://rukminim1.flixcart.com/image/416/416/kpft18w0/computer/k/c/5/xps-9305-notebook-dell-original-imag3nzeyqfcsw3v.jpeg?q=70"]
-        })
-    }
+    const { cart } = useSelector(state => state.public)
+    const navigate = useNavigate()
+    useEffect(() => {
+        if (cart.length === 0) {
+            navigate("/user")
+        }
+    }, [])
+
+
     return <>
         <div className="container">
             <div className="row">
@@ -20,7 +22,7 @@ const Checkout = () => {
                     <LeftColumn />
                 </div>
                 <div className="col-sm-4">
-                    <BillCard cartProducts={cartProducts} />
+                    <BillCard cartProducts={cart} />
                 </div>
             </div>
         </div>
@@ -28,9 +30,22 @@ const Checkout = () => {
 }
 
 const LeftColumn = () => {
+    const { info, placed } = useSelector(state => state.user)
+    const { cart } = useSelector(state => state.public)
+
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+    useEffect(() => {
+        if (placed) {
+            dispatch(emptyCart())
+            navigate("/payment-success")
+
+        }
+    }, [placed])
+
     const handleCheckout = () => {
-        navigate("/payment-success")
+        dispatch(placeOrder(cart))
+        // navigate("/payment-success")
     }
     return <>
         <div>
@@ -40,9 +55,10 @@ const LeftColumn = () => {
                     <div>
                         <input type="radio" className='form-check-input' />
                         <p><strong>Home Address</strong></p>
-                        <p>Fake Home</p>
-                        <p>Fake Street</p>
-                        <p>Abd, MH 431005</p>
+                        <p>{info.address.house}</p>
+                        <p>{info.address.street}</p>
+                        <p>{info.address.city}</p>
+                        <p>{info.address.pin}</p>
                     </div>
                 </div>
             </div>
